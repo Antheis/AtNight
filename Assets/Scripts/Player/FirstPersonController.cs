@@ -1,0 +1,170 @@
+using UnityEngine;
+using UnityStandardAssets.Characters.FirstPerson;
+using Random = UnityEngine.Random;
+
+namespace Player
+{
+    [RequireComponent(typeof (CharacterController), typeof (AudioSource), typeof(Animator))]
+    public class FirstPersonController : MonoBehaviour
+    {
+        [Header("Movement parameters")]
+        [SerializeField] private float _walkSpeed = 7.5f;
+        [SerializeField] private float _runSpeed = 10f;
+        [SerializeField] private float _jumpForce = 10f;
+        [SerializeField] private float _gravityMultiplier = 1f;
+        
+        [SerializeField] private MouseLook _mouseLook;
+
+        private bool _jump;
+        private bool _isSprinting;
+        private float _yRotation;
+        private Vector2 _input;
+        private Vector3 _moveDir = Vector3.zero;
+        private CollisionFlags _collisionFlags;
+        private bool _previouslyGrounded;
+        private bool _jumping;
+        
+        private AudioSource _audioSource;
+        private Animator _animator;
+        private Camera _camera;
+        private CharacterController _characterController;
+
+        private readonly int _hashSpeed = Animator.StringToHash("Speed");
+        private readonly int _hashAirbone = Animator.StringToHash("Airbone");
+        [Header("Sound list")]
+        #region Audio part
+        [SerializeField] private AudioClip[] _footstepSounds;    // an array of footstep sounds that will be randomly selected from.
+        [SerializeField] private AudioClip _jumpSound;           // the sound played when character leaves the ground.
+        [SerializeField] private AudioClip _landSound;           // the sound played when character touches back on ground.
+
+        private void PlayLandingSound()
+        {
+            _audioSource.clip = _landSound;
+            _audioSource.Play();
+        }
+        private void PlayJumpSound()
+        {
+            _audioSource.clip = _jumpSound;
+            _audioSource.Play();
+        }
+        
+        private void PlayFootStepAudio()
+        {
+            if (!_characterController.isGrounded || _footstepSounds.Length == 0)
+                return;
+            
+            // pick & play a random footstep sound from the array,
+            // excluding sound at index 0
+            int n = Random.Range(1, _footstepSounds.Length);
+            _audioSource.clip = _footstepSounds[n];
+            _audioSource.PlayOneShot(_audioSource.clip);
+            // move picked sound to index 0 so it's not picked next time
+            _footstepSounds[n] = _footstepSounds[0];
+            _footstepSounds[0] = _audioSource.clip;
+        }
+        #endregion
+        
+        private void Awake()
+        {
+            _characterController = GetComponent<CharacterController>();
+            _camera = GetComponentInChildren<Camera>();
+            _audioSource = GetComponent<AudioSource>();
+            _animator = GetComponent<Animator>();
+            
+            _mouseLook.Init(transform , _camera.transform);
+
+            _jumping = false;
+        }
+
+        private void Update()
+        {
+            _mouseLook.LookRotation (transform, _camera.transform);
+
+            // the jump state needs to read here to make sure it is not missed
+            if (!_jump)
+                _jump = Input.GetButtonDown("Jump");
+
+            if (!_previouslyGrounded && _characterController.isGrounded)
+            {
+                PlayLandingSound();
+                _moveDir.y = 0f;
+                _jumping = false;
+            }
+            
+            if (!_characterController.isGrounded && !_jumping && _previouslyGrounded)
+                _moveDir.y = 0f;
+
+            _previouslyGrounded = _characterController.isGrounded;
+        }
+
+        private void FixedUpdate()
+        {
+            float speed;
+            GetInput(out speed);
+            // always move along the camera forward as it is the direction that it being aimed at
+            Vector3 desiredMove = transform.forward*_input.y + transform.right*_input.x;
+
+            // get a normal for the surface that is being touched to move along it
+            RaycastHit hitInfo;
+            Physics.SphereCast(transform.position, _characterController.radius, Vector3.down, out hitInfo,
+                               _characterController.height/2f, Physics.AllLayers, QueryTriggerInteraction.Ignore);
+            desiredMove = Vector3.ProjectOnPlane(desiredMove, hitInfo.normal).normalized;
+
+            _moveDir.x = desiredMove.x*speed;
+            _moveDir.z = desiredMove.z*speed;
+
+            if (_characterController.isGrounded)
+            {
+
+                _moveDir.y = -9.81f * _gravityMultiplier;
+
+                if (_jump)
+                {
+                    _moveDir.y = _jumpForce;
+                    PlayJumpSound();
+                    _jump = false;
+                    _jumping = true;
+                }
+            }
+            else
+                _moveDir += Physics.gravity * _gravityMultiplier * Time.fixedDeltaTime;
+
+            _collisionFlags = _characterController.Move(_moveDir*Time.fixedDeltaTime);
+
+            _mouseLook.UpdateCursorLock();
+            
+            _animator.SetFloat(_hashSpeed, desiredMove.magnitude);
+            _animator.SetBool(_hashAirbone, !_previouslyGrounded);
+
+        }
+
+        private void GetInput(out float speed)
+        {
+            // Read input
+            float horizontal = Input.GetAxis("Horizontal");
+            float vertical = Input.GetAxis("Vertical");
+            
+            _isSprinting = Input.GetKey(KeyCode.LeftShift);
+
+            speed = _isSprinting ? _runSpeed : _walkSpeed;
+            _input = new Vector2(horizontal, vertical);
+
+            // normalize input if it exceeds 1 in combined length:
+            if (_input.sqrMagnitude > 1)
+                _input.Normalize();
+        }
+
+        private void OnControllerColliderHit(ControllerColliderHit hit)
+        {
+            Rigidbody body = hit.collider.attachedRigidbody;
+            //dont move the rigidbody if the character is on top of it
+            if (_collisionFlags == CollisionFlags.Below)
+                return;
+
+            if (body == null || body.isKinematic)
+                return;
+            
+            body.AddForceAtPosition(_characterController.velocity*0.1f, hit.point, ForceMode.Impulse);
+        }
+    }
+}
