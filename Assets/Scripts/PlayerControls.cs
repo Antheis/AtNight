@@ -24,11 +24,15 @@ public class PlayerControls : MonoBehaviour {
 			RaycastHit hit;
 			if (Physics.Raycast(ray, out hit) && hit.distance < 5) {
 				if (hit.transform.CompareTag("Memory")) {
-					info.addMemory();
+					hit.transform.gameObject.GetComponent<MemoryInfo>().PickObject();
 					Destroy(hit.transform.gameObject);
 				}
 				else if (hit.transform.CompareTag("Battery")) {
 					info.addBattery();
+					Destroy(hit.transform.gameObject);
+				}
+				else if (hit.transform.CompareTag("Pill")) {
+					info.addPill();
 					Destroy(hit.transform.gameObject);
 				}
 			}
