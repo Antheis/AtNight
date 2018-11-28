@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityStandardAssets.Characters.FirstPerson;
 using Random = UnityEngine.Random;
@@ -14,7 +15,8 @@ namespace Player
         [SerializeField] private float _gravityMultiplier = 1f;
         
         [SerializeField] private MouseLook _mouseLook;
-
+        [SerializeField] private bool _dead;
+        
         private bool _jump;
         private bool _isSprinting;
         private float _yRotation;
@@ -31,6 +33,7 @@ namespace Player
 
         private readonly int _hashSpeed = Animator.StringToHash("Speed");
         private readonly int _hashAirbone = Animator.StringToHash("Airbone");
+        private readonly int _hashDead = Animator.StringToHash("Dead");
         [Header("Sound list")]
         #region Audio part
         [SerializeField] private AudioClip[] _footstepSounds;    // an array of footstep sounds that will be randomly selected from.
@@ -75,9 +78,11 @@ namespace Player
 
             _jumping = false;
         }
-
         private void Update()
         {
+            if (_dead)
+                return;
+            
             _mouseLook.LookRotation (transform, _camera.transform);
 
             // the jump state needs to read here to make sure it is not missed
@@ -96,9 +101,11 @@ namespace Player
 
             _previouslyGrounded = _characterController.isGrounded;
         }
-
         private void FixedUpdate()
         {
+            if (_dead)
+                return;
+            
             float speed;
             GetInput(out speed);
             // always move along the camera forward as it is the direction that it being aimed at
@@ -137,7 +144,6 @@ namespace Player
             _animator.SetBool(_hashAirbone, !_previouslyGrounded);
 
         }
-
         private void GetInput(out float speed)
         {
             // Read input
@@ -153,7 +159,6 @@ namespace Player
             if (_input.sqrMagnitude > 1)
                 _input.Normalize();
         }
-
         private void OnControllerColliderHit(ControllerColliderHit hit)
         {
             Rigidbody body = hit.collider.attachedRigidbody;
@@ -166,5 +171,32 @@ namespace Player
             
             body.AddForceAtPosition(_characterController.velocity*0.1f, hit.point, ForceMode.Impulse);
         }
+
+        public void Death(Transform from)
+        {
+            if (!_dead)
+            {
+                _dead = true;
+                StartCoroutine(DeathCoroutine(from));
+            }
+        }
+
+        private readonly float DeathTurnDegreesPerSec = 10f;
+        private IEnumerator DeathCoroutine(Transform from)
+        {
+            _animator.SetTrigger(_hashDead);
+            
+            var dest = from.position;
+            dest.y = transform.position.y;
+            var desiredDirection = dest - transform.position;
+            while (desiredDirection != transform.forward)
+            {
+                Vector3 newDir = Vector3.RotateTowards(transform.forward, desiredDirection, DeathTurnDegreesPerSec * Time.deltaTime, 0.0f);
+                // Move our position a step closer to the target.
+                transform.rotation = Quaternion.LookRotation(newDir);
+                yield return null;
+            }
+        }
+        
     }
 }

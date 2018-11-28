@@ -2,7 +2,7 @@ using UnityEngine;
 
 using System.Collections;
 
-
+/*
 public class EnnemyBehavior : MonoBehaviour {
 
 
@@ -632,3 +632,4 @@ public class EnnemyBehavior : MonoBehaviour {
 
 
 }
+*/

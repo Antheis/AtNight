@@ -131,7 +131,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1059131884410842}
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -85.52, y: 5.3, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4475629291371044}
@@ -313,7 +313,7 @@ Light:
   m_SpotAngle: 75
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 0
+    m_Type: 2
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -409,7 +409,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1201807503960908}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 948f4100a11a5c24981795d21301da5c, type: 3}
   m_Name: 
@@ -520,10 +520,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1a8830666e0b1e409caa47cca7549fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  memories: 0
   batteries: 0
   batteryLife: 100
+  pills: 0
+  stressBar: 100
   batteryDisplay: {fileID: 0}
+  pillDisplay: {fileID: 0}
+  flashlightDisplay: {fileID: 0}
+  stressDisplay: {fileID: 0}
 --- !u!143 &143678954812207828
 CharacterController:
   m_ObjectHideFlags: 1

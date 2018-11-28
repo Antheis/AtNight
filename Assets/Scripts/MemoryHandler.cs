@@ -17,6 +17,9 @@ public class MemoryHandler : MonoBehaviour {
 	public RawImage[] inventoryImg;
 	private bool[] memories;
 
+	public delegate void ObjectPickupDelegate(int nbPickedUp);
+	public event ObjectPickupDelegate OnNewMemoryPickedUp;
+	
 	// Use this for initialization
 	void Start () {
 		memories = new bool[Enum.GetValues(typeof(Memory)).Length];
@@ -24,9 +27,19 @@ public class MemoryHandler : MonoBehaviour {
 			memories[i] = false;
 	}
 
-	public void MemoryPicked(Memory mem) {
+	public void MemoryPicked(Memory mem)
+	{
 		memories[(int)mem] = true;
 		inventoryImg[(int)mem].color = new Color(0.8f, 0.8f, 0.8f);
+
+		if (OnNewMemoryPickedUp != null)
+		{
+			int nb = 0;
+			foreach(bool b in memories)
+				if (b)
+					nb++;
+			OnNewMemoryPickedUp(nb);
+		}
 	}
 
 	public bool GetAllMemories() {
