@@ -38,7 +38,7 @@ namespace Player
         private Camera _camera;
         private CharacterController _characterController;
         private PlayerInfo _playerInfo;
-        
+        private CinematicHandling _cinematicHandling;
         private readonly int _hashSpeed = Animator.StringToHash("Speed");
         private readonly int _hashAirbone = Animator.StringToHash("Airbone");
         private readonly int _hashDead = Animator.StringToHash("Dead");
@@ -91,6 +91,7 @@ namespace Player
             
             _mouseLook.Init(transform , _camera.transform);
             _jumping = false;
+            _cinematicHandling = FindObjectOfType<CinematicHandling>();
         }
         
         private void Update()
@@ -161,7 +162,6 @@ namespace Player
             _animator.SetFloat(_hashSpeed, desiredMove.magnitude);
             _animator.SetBool(_hashAirbone, !_previouslyGrounded);
             _animator.SetFloat(_hashStress, _playerInfo.stressBar);
-            _animator.SetInteger(_hashRandom, Random.Range(0, 10));
         }
 
         private void GetInput()
@@ -231,24 +231,24 @@ namespace Player
             if (!_dead)
             {
                 _dead = true;
+                _animator.SetTrigger(_hashDead);
                 StartCoroutine(DeathCoroutine(from));
             }
         }
         private readonly float DeathTurnDegreesPerSec = 10f;
         private IEnumerator DeathCoroutine(Transform from)
         {
-            _animator.SetTrigger(_hashDead);
-            
             var dest = from.position;
             dest.y = transform.position.y;
-            var desiredDirection = dest - transform.position;
-            while (desiredDirection != transform.forward)
+            var desiredDirection = Quaternion.LookRotation (dest - transform.position);
+            while (!desiredDirection.Equals(transform.rotation))
             {
-                Vector3 newDir = Vector3.RotateTowards(transform.forward, desiredDirection, DeathTurnDegreesPerSec * Time.deltaTime, 0.0f);
-                // Move our forward a step closer to the target.
-                transform.rotation = Quaternion.LookRotation(newDir);
+                var str = Mathf.Min (DeathTurnDegreesPerSec * Time.deltaTime, 1);
+                transform.rotation = Quaternion.Lerp (transform.rotation, desiredDirection, str);
                 yield return null;
             }
+            _cinematicHandling.FadeToBlack(1);
+            yield return new WaitForSeconds(1f);
         }
         #endregion
     }

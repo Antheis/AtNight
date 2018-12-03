@@ -254,6 +254,44 @@ Prefab:
       propertyPath: stressDisplay
       value: 
       objectReference: {fileID: 2040387720}
+    - target: {fileID: 114756524719240842, guid: 67f8bd3be441a8d4b9dcb8de27f56fd2,
+        type: 2}
+      propertyPath: weight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114459747903440286, guid: 67f8bd3be441a8d4b9dcb8de27f56fd2,
+        type: 2}
+      propertyPath: weight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737088765031098, guid: 67f8bd3be441a8d4b9dcb8de27f56fd2, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737088765031098, guid: 67f8bd3be441a8d4b9dcb8de27f56fd2, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737088765031098, guid: 67f8bd3be441a8d4b9dcb8de27f56fd2, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737088765031098, guid: 67f8bd3be441a8d4b9dcb8de27f56fd2, type: 2}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737088765031098, guid: 67f8bd3be441a8d4b9dcb8de27f56fd2, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737088765031098, guid: 67f8bd3be441a8d4b9dcb8de27f56fd2, type: 2}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737088765031098, guid: 67f8bd3be441a8d4b9dcb8de27f56fd2, type: 2}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 67f8bd3be441a8d4b9dcb8de27f56fd2, type: 2}
   m_IsPrefabAsset: 0
@@ -638,6 +676,11 @@ Prefab:
       propertyPath: FPS
       value: 
       objectReference: {fileID: 591481011}
+    - target: {fileID: 114170241769927580, guid: ad5740be14dbe604b83cbe443c5263b8,
+        type: 2}
+      propertyPath: m_Color.a
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 114056854386634914, guid: ad5740be14dbe604b83cbe443c5263b8, type: 2}
     - {fileID: 222814443768552094, guid: ad5740be14dbe604b83cbe443c5263b8, type: 2}

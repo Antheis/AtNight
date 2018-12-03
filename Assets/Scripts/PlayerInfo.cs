@@ -7,7 +7,6 @@ public class PlayerInfo : MonoBehaviour {
 	[HideInInspector]
 	public int batteries = 0;
 	public int batteryLife = 100;
-	private bool flashlight = false;
 	[HideInInspector]
 	public int pills = 0;
 	public float stressBar = 100.0f;
@@ -17,13 +16,21 @@ public class PlayerInfo : MonoBehaviour {
 	public Slider flashlightDisplay;
 	public Slider stressDisplay;
 
-	void Start() {
+	private Light _flashlight;
+	public bool FlashLightIsOn
+	{
+		get { return (_flashlight.enabled); }
+	}
+	private void Awake()
+	{
+		_flashlight = GetComponentInChildren<Light>();
+		
 		batteryDisplay.text = "x " + batteries;
 		pillDisplay.text = "x " + pills;
 		StartCoroutine(HandleFlashlightBattery());
 	}
 
-	void UpdateFlashlight()
+	private void UpdateFlashlight()
 	{
 		flashlightDisplay.value = batteryLife;
 		Color col = flashlightDisplay.fillRect.GetComponent<Image>().color;
@@ -32,7 +39,7 @@ public class PlayerInfo : MonoBehaviour {
 		flashlightDisplay.fillRect.GetComponent<Image>().color = col;
 	}
 
-	void UpdateStress()
+	private void UpdateStress()
 	{
 		stressDisplay.value = stressBar;
 		Color col = stressDisplay.fillRect.GetComponent<Image>().color;
@@ -73,15 +80,20 @@ public class PlayerInfo : MonoBehaviour {
 		UpdateStress();
 	}
 
-	public void HandleFlashlight() {
-		flashlight = !flashlight;
-		if (flashlight)
+	public void StopFlashLight()
+	{
+		HandleFlashlight(false);
+	}
+	public void HandleFlashlight(bool on)
+	{
+		if (!FlashLightIsOn && on)
 			--batteryLife;
+		_flashlight.enabled = on;
 	}
 
 	IEnumerator HandleFlashlightBattery() {
 		yield return new WaitForSeconds(1);
-		if (flashlight) {
+		if (FlashLightIsOn) {
 			--batteryLife;
 			UpdateFlashlight();
 		} else {

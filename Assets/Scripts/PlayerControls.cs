@@ -38,9 +38,7 @@ public class PlayerControls : MonoBehaviour {
 			}
 		}
 		if (Input.GetKeyDown(KeyCode.F))
-		{
-			info.HandleFlashlight();
-		}
+			info.HandleFlashlight(!info.FlashLightIsOn);
 
 		if (Input.GetButtonDown("Interact"))
 		{

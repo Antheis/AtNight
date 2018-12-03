@@ -1,36 +1,47 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Player;
+﻿using Player;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityStandardAssets.Characters.FirstPerson;
 
-public class CinematicHandling : MonoBehaviour {
-	private CountdownTimer countdownTimer;
-	private Image img;
-	public FirstPersonController FPS;
+public class CinematicHandling : MonoBehaviour
+{
+	private CountdownTimer _countdownTimer;
+	private Image _img;
+	private FirstPersonController _player;
 	private int fadeDuration = 3;
+	private bool _fadeToBlack = false;
+	
+	void Awake ()
+	{
+		_countdownTimer = GetComponent<CountdownTimer>();
+		_img = GetComponent<Image>();
+		Show(fadeDuration);
+		
+		_player = FindObjectOfType<FirstPersonController>();
+	}
+	
+	void Update ()
+	{
+		float remainingPerc = _countdownTimer.GetProportionTimeRemaining();
+		Color c = _img.color;
+		c.a = (_fadeToBlack) ? (1 - remainingPerc) : (remainingPerc);
+		_img.color = c;
+		if (remainingPerc <= 0.1f)
+			_player.enabled = true;
+		if (remainingPerc <= 0.01f)
+			enabled = (false);
+	}
+	
+	public void Show(int timerTotal)
+	{
+		_countdownTimer.ResetTimer(timerTotal);
+		_fadeToBlack = false;
+		enabled = (true);
+	}
 
-	void Awake () {
-		countdownTimer = GetComponent<CountdownTimer>();
-		img = GetComponent<Image>();
-		StartFading(fadeDuration);
-		FPS.enabled = false;
-	}
-	
-	void Update () {
-		float alphaRemaining = countdownTimer.GetProportionTimeRemaining();
-		Debug.Log(alphaRemaining);
-		Color c = img.color;
-		c.a = alphaRemaining;
-		img.color = c;
-		if (alphaRemaining < 0.1)
-			FPS.enabled = true;
-		if (alphaRemaining < 0.01)
-			Destroy(transform.parent.gameObject);
-	}
-	
-	public void StartFading (int timerTotal) {
-		countdownTimer.ResetTimer(timerTotal);
+	public void FadeToBlack(int timerTotal)
+	{
+		_countdownTimer.ResetTimer(timerTotal);
+		_fadeToBlack = true;
+		enabled = (true);
 	}
 }
