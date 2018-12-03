@@ -11,7 +11,7 @@ public class CinematicHandling : MonoBehaviour {
 	public FirstPersonController FPS;
 	private int fadeDuration = 3;
 
-	void Start () {
+	void Awake () {
 		countdownTimer = GetComponent<CountdownTimer>();
 		img = GetComponent<Image>();
 		StartFading(fadeDuration);

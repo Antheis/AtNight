@@ -39,7 +39,6 @@ public class PlayerInfo : MonoBehaviour {
 		col.g = stressDisplay.value * 0.01f;
 		col.b = col.g;
 		stressDisplay.fillRect.GetComponent<Image>().color = col;
-		Debug.Log(stressDisplay.value);
 	}
 
 	public void addBattery() {
