@@ -11,6 +11,8 @@ public class PlayerInfo : MonoBehaviour {
 	public int pills = 0;
 	public float stressBar = 100.0f;
 
+    [Space(5)]
+    [Header("Display")]
 	public Text batteryDisplay;
 	public Text pillDisplay;
 	public Slider flashlightDisplay;
@@ -21,18 +23,25 @@ public class PlayerInfo : MonoBehaviour {
 	{
 		get { return (_flashlight.enabled); }
 	}
+
+    private float _timeElapsed = 0;
+
 	private void Awake()
 	{
 		_flashlight = GetComponentInChildren<Light>();
 		
 		batteryDisplay.text = "x " + batteries;
 		pillDisplay.text = "x " + pills;
-		StartCoroutine(HandleFlashlightBattery());
 	}
 
     private void Update()
     {
-        
+        _timeElapsed += Time.deltaTime;
+        if (_timeElapsed >= 5f)
+        {
+            HandleFlashlightBattery();
+            _timeElapsed = 0;
+        }
     }
 
     private void UpdateFlashlight()
@@ -96,8 +105,7 @@ public class PlayerInfo : MonoBehaviour {
 		_flashlight.enabled = on;
 	}
 
-	IEnumerator HandleFlashlightBattery() {
-		yield return new WaitForSeconds(5);
+	void HandleFlashlightBattery() {
 		if (FlashLightIsOn) {
 			--batteryLife;
 			UpdateFlashlight();
@@ -105,6 +113,5 @@ public class PlayerInfo : MonoBehaviour {
 			stressBar -= 1.5f;
 			UpdateStress();
 		}
-		StartCoroutine(HandleFlashlightBattery());
 	}
 }
