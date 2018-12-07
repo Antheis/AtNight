@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityStandardAssets.Characters.FirstPerson;
 using Random = UnityEngine.Random;
 
@@ -241,14 +242,16 @@ namespace Player
             var dest = from.position;
             dest.y = transform.position.y;
             var desiredDirection = Quaternion.LookRotation (dest - transform.position);
-            while (!desiredDirection.Equals(transform.rotation))
+            while (desiredDirection != transform.rotation)
             {
                 var str = Mathf.Min (DeathTurnDegreesPerSec * Time.deltaTime, 1);
                 transform.rotation = Quaternion.Lerp (transform.rotation, desiredDirection, str);
+                Debug.Log(desiredDirection + " / " + transform.rotation);
                 yield return null;
             }
             _cinematicHandling.FadeToBlack(1);
             yield return new WaitForSeconds(1f);
+            SceneManager.LoadScene("EndingScreen");
         }
         #endregion
     }
