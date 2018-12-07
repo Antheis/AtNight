@@ -30,7 +30,12 @@ public class PlayerInfo : MonoBehaviour {
 		StartCoroutine(HandleFlashlightBattery());
 	}
 
-	private void UpdateFlashlight()
+    private void Update()
+    {
+        
+    }
+
+    private void UpdateFlashlight()
 	{
 		flashlightDisplay.value = batteryLife;
 		Color col = flashlightDisplay.fillRect.GetComponent<Image>().color;
@@ -92,12 +97,12 @@ public class PlayerInfo : MonoBehaviour {
 	}
 
 	IEnumerator HandleFlashlightBattery() {
-		yield return new WaitForSeconds(1);
+		yield return new WaitForSeconds(5);
 		if (FlashLightIsOn) {
 			--batteryLife;
 			UpdateFlashlight();
 		} else {
-			stressBar -= 0.5f;
+			stressBar -= 1.5f;
 			UpdateStress();
 		}
 		StartCoroutine(HandleFlashlightBattery());
