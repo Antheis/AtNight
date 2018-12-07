@@ -4,23 +4,23 @@ using System.Collections;
 public class CountdownTimer : MonoBehaviour 
 {
 	private float countdownTimerStartTime;
-	private int countdownTimerDuration;
+	private float countdownTimerDuration;
 
-	public int GetTotalSeconds()
+	public float GetTotalSeconds()
 	{
 		return countdownTimerDuration;
 	}
 
-	public void ResetTimer(int seconds)
+	public void ResetTimer(float seconds)
 	{
 		countdownTimerStartTime = Time.time;
 		countdownTimerDuration = seconds;
 	}
 
-	public int GetSecondsRemaining()
+	public float GetSecondsRemaining()
 	{
-		int elapsedSeconds = (int)(Time.time - countdownTimerStartTime);
-		int secondsLeft = (countdownTimerDuration - elapsedSeconds);
+		float elapsedSeconds = (Time.time - countdownTimerStartTime);
+		float secondsLeft = (countdownTimerDuration - elapsedSeconds);
 		return secondsLeft;
 	}
 

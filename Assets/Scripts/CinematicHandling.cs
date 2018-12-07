@@ -2,16 +2,19 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(CanvasGroup))]
 public class CinematicHandling : MonoBehaviour
 {
 	private CountdownTimer _countdownTimer;
 	private Image _img;
 	private FirstPersonController _player;
-	private int fadeDuration = 3;
+	private float fadeDuration = 0.5f;
 	private bool _fadeToBlack = false;
-	
+	private CanvasGroup _group;
+
 	void Awake ()
 	{
+		_group = GetComponentInChildren<CanvasGroup>();
 		_countdownTimer = GetComponent<CountdownTimer>();
 		_img = GetComponent<Image>();
 		Show(fadeDuration);
@@ -22,23 +25,23 @@ public class CinematicHandling : MonoBehaviour
 	void Update ()
 	{
 		float remainingPerc = _countdownTimer.GetProportionTimeRemaining();
-		Color c = _img.color;
-		c.a = (_fadeToBlack) ? (1 - remainingPerc) : (remainingPerc);
-		_img.color = c;
-		if (remainingPerc <= 0.1f)
+		
+		_group.alpha = (_fadeToBlack) ? (1 - remainingPerc) : (remainingPerc);
+
+		if (remainingPerc <= 0.1f && _player != null)
 			_player.enabled = true;
-		if (remainingPerc <= 0.01f)
+		if (remainingPerc <= 0f)
 			enabled = (false);
 	}
 	
-	public void Show(int timerTotal)
+	public void Show(float timerTotal)
 	{
 		_countdownTimer.ResetTimer(timerTotal);
 		_fadeToBlack = false;
 		enabled = (true);
 	}
 
-	public void FadeToBlack(int timerTotal)
+	public void FadeToBlack(float timerTotal)
 	{
 		_countdownTimer.ResetTimer(timerTotal);
 		_fadeToBlack = true;
