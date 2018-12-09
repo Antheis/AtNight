@@ -140,7 +140,6 @@ public class EnnemyBehavior : MonoBehaviour
                 monitorRunTo = true; //make sure that when we have made it to our buffer distance (close to user) we stop the charge until far enough away.
                 executeBufferState = false; //go back to normal activity
             }
-
             //start attacking if close enough
             if (distance < attackRange) {
                 Attack();
