@@ -22,7 +22,7 @@ public class PlayerControls : MonoBehaviour {
 		{
 			Ray ray = cam.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
 			RaycastHit hit;
-			if (Physics.Raycast(ray, out hit) && hit.distance < 5) {
+			if (Physics.Raycast(ray, out hit, _interactionDistance, Layer.Interactable) && hit.distance < 5) {
 				if (hit.transform.CompareTag("Memory")) {
 					hit.transform.gameObject.GetComponent<MemoryInfo>().PickObject();
 					Destroy(hit.transform.gameObject);
