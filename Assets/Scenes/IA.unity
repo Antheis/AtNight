@@ -2031,7 +2031,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &789403646
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2060,6 +2060,7 @@ MonoBehaviour:
   estRayTimer: 1
   teleportDistance: 30
   reduceRangeTime: 2
+  _pauseMenu: {fileID: 2040387724}
 --- !u!143 &789403647
 CharacterController:
   m_ObjectHideFlags: 0
@@ -3067,7 +3068,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!23 &1180235529
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -3273,6 +3274,7 @@ MonoBehaviour:
   teleportDistance: 30
   reduceRangeTime: 10
   lostPlayerTime: 10
+  _pauseMenu: {fileID: 2040387724}
 --- !u!143 &1180235533
 CharacterController:
   m_ObjectHideFlags: 0

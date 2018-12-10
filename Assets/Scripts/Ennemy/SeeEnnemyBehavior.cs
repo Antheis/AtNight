@@ -25,7 +25,7 @@ public class SeeEnnemyBehavior : MonoBehaviour {
   private float lostPlayerTimer;
   public float lostPlayerTime = 2.0f;
 
-
+  public PauseMenuInterface _pauseMenu;
 	CharacterController characterController; //CC used for enemy movement and etc.
 	private Animator _animator;
 	private EnnemySoundManager _soundManager;
@@ -52,7 +52,7 @@ public class SeeEnnemyBehavior : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-			if (on && initialGo)
+			if (on && initialGo && !_pauseMenu.isOpen())
 					AIFunctionality();
 	}
 
@@ -180,5 +180,13 @@ public class SeeEnnemyBehavior : MonoBehaviour {
 
   private void Stop() {
     _animator.speed = 0;
+  }
+
+  public void ActivateAI() {
+    on = true;
+  }
+
+  public void DeactivateAI() {
+    on = false;
   }
 }
