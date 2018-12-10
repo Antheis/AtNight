@@ -29,7 +29,8 @@ public class SeeEnnemyBehavior : MonoBehaviour {
 	CharacterController characterController; //CC used for enemy movement and etc.
 	private Animator _animator;
 	private EnnemySoundManager _soundManager;
-
+	[SerializeField] private float _memoryNeeded = 3;
+	
 	private readonly int _hashSpeed = Animator.StringToHash("Speed");
 	private readonly int _hashAttack = Animator.StringToHash("Attack");
 
@@ -37,8 +38,11 @@ public class SeeEnnemyBehavior : MonoBehaviour {
 			StartCoroutine(Initialize()); //co-routine is used incase you need to interupt initiialization until something else is done.
 	}
 
-	IEnumerator Initialize() {
+	IEnumerator Initialize()
+	{
 
+		var memory = FindObjectOfType<MemoryHandler>();
+		memory.OnNewMemoryPickedUp += MemoryPickedUp;
 			player = FindObjectOfType<FirstPersonController>();
 			_animator = GetComponent<Animator>();
 			render = gameObject.GetComponent<Renderer>();
@@ -50,6 +54,12 @@ public class SeeEnnemyBehavior : MonoBehaviour {
 			yield return null;
 	}
 
+	private void MemoryPickedUp(int number)
+	{
+		if (number <= _memoryNeeded)
+			on = true;
+	}
+	
 	// Update is called once per frame
 	void Update () {
 			if (on && initialGo && !_pauseMenu.isOpen())

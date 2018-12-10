@@ -29,7 +29,6 @@ public class MemoryHandler : MonoBehaviour {
 		for (int i = 0; i < memories.Length; ++i)
 			memories[i] = false;
 	}
-
 	
 	public void MemoryPicked(Memory mem)
 	{

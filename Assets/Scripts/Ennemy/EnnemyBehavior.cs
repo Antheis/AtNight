@@ -49,6 +49,7 @@ public class EnnemyBehavior : MonoBehaviour
     private bool monitorRunTo = false; //when AI is set to runTo, they will charge in, and then not charge again to after far enough away.
     private int wpPatrol = 0; //determines what waypoint we are heading toward.
     private bool pauseWpControl; //makes sure unit pauses appropriately.
+    [SerializeField] private float _memoryNeeded = 1;
 
     private Animator _animator;
     private EnnemySoundManager _soundManager;
@@ -64,6 +65,9 @@ public class EnnemyBehavior : MonoBehaviour
     }
 
     IEnumerator Initialize() {
+        var memory = FindObjectOfType<MemoryHandler>();
+        memory.OnNewMemoryPickedUp += MemoryPickedUp;
+        
         if ((estimateElevation) && (floatHeight > 0.0f)) {
             estGravityTimer = Time.time;
         }
@@ -77,6 +81,13 @@ public class EnnemyBehavior : MonoBehaviour
         yield return null;
     }
 
+
+    private void MemoryPickedUp(int number)
+    {
+        if (number <= _memoryNeeded)
+            on = true;
+    }
+    
     //---Main Functionality---//
     void Update () {
         if (on && initialGo && !_pauseMenu.isOpen())
