@@ -52,6 +52,7 @@ public class EnnemyBehavior : MonoBehaviour
 
     private Animator _animator;
     private EnnemySoundManager _soundManager;
+    public PauseMenuInterface _pauseMenu;
 
     private readonly int _hashSpeed = Animator.StringToHash("Speed");
     private readonly int _hashAttack = Animator.StringToHash("Attack");
@@ -78,7 +79,7 @@ public class EnnemyBehavior : MonoBehaviour
 
     //---Main Functionality---//
     void Update () {
-        if (on && initialGo)
+        if (on && initialGo && !_pauseMenu.isOpen())
             AIFunctionality();
     }
 
@@ -528,6 +529,11 @@ public class EnnemyBehavior : MonoBehaviour
 
     }
 
+    public void ActivateAI() {
+      on = true;
+    }
 
-
+    public void DeactivateAI() {
+      on = false;
+    }
 }
