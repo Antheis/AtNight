@@ -242,11 +242,12 @@ namespace Player
             var dest = from.position;
             dest.y = transform.position.y;
             var desiredDirection = Quaternion.LookRotation (dest - transform.position);
-            while (desiredDirection != transform.rotation)
+            float timer = 0;
+            while (timer < 2.5f)
             {
                 var str = Mathf.Min (DeathTurnDegreesPerSec * Time.deltaTime, 1);
                 transform.rotation = Quaternion.Lerp (transform.rotation, desiredDirection, str);
-                Debug.Log(desiredDirection + " / " + transform.rotation);
+                timer += Time.deltaTime;
                 yield return null;
             }
             _cinematicHandling.FadeToBlack(1);

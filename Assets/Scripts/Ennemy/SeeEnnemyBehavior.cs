@@ -56,7 +56,7 @@ public class SeeEnnemyBehavior : MonoBehaviour {
 
 	private void MemoryPickedUp(int number)
 	{
-		if (number <= _memoryNeeded)
+		if (number >= _memoryNeeded)
 			on = true;
 	}
 	
