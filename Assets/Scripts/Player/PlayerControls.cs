@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class PlayerControls : MonoBehaviour {
 	private Camera cam;
+	private float _baseFOV;
+	[SerializeField] private float _zoomedFOV = 40f;
 	private PlayerInfo info;
 	public PauseMenuInterface pauseMenu;
 	public InventoryInterface inventory;
@@ -13,6 +15,7 @@ public class PlayerControls : MonoBehaviour {
 	
 	void Start () {
 		cam = Camera.main;
+		_baseFOV = cam.fieldOfView;
 		info = GetComponent<PlayerInfo>();
 	}
 	
@@ -39,7 +42,7 @@ public class PlayerControls : MonoBehaviour {
 		}
 		if (Input.GetKeyDown(KeyCode.F))
 			info.HandleFlashlight(!info.FlashLightIsOn);
-
+		CameraZoom(Input.GetKey(KeyCode.A));
 		if (Input.GetButtonDown("Interact"))
 		{
 			Ray ray = cam.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
@@ -63,5 +66,16 @@ public class PlayerControls : MonoBehaviour {
 				inventory.HandleInventory();
 			pauseMenu.HandlePauseMenu();
 		}
+	}
+
+	private float _zoomingState;
+	
+	private void CameraZoom(bool zooming)
+	{
+		if (zooming)
+			_zoomingState = Mathf.Clamp01(_zoomingState - Time.deltaTime * 2f);
+		else
+			_zoomingState = Mathf.Clamp01(_zoomingState + Time.deltaTime * 2f);
+		cam.fieldOfView = Mathf.Lerp(_zoomedFOV, _baseFOV, _zoomingState);
 	}
 }
