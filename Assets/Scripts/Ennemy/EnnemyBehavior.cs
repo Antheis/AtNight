@@ -21,6 +21,8 @@ public class EnnemyBehavior : MonoBehaviour
     public bool estimateElevation = false; //This implements a pause between raycasts for heights and guestimates the need to move up/down in height based on the previous raycast.
     public float estRayTimer = 1.0f; //The amount of time in seconds between raycasts for gravity and elevation checks.
     private FirstPersonController player; //The target, or whatever the AI is looking for.
+    public float teleportDistance = 30.0f; // distance for the AI to teleport around the player
+    public float reduceRangeTime = 2.0f; // The time to wait for the AI to decrease its distance towars the target when teleport
 
     //private script handled variables
 
@@ -49,10 +51,11 @@ public class EnnemyBehavior : MonoBehaviour
     private bool pauseWpControl; //makes sure unit pauses appropriately.
 
     private Animator _animator;
+    private EnnemySoundManager _soundManager;
 
     private readonly int _hashSpeed = Animator.StringToHash("Speed");
     private readonly int _hashAttack = Animator.StringToHash("Attack");
-    
+
     //---Starting/Initializing functions---//
 
     void Start() {
@@ -66,8 +69,10 @@ public class EnnemyBehavior : MonoBehaviour
 
         player = FindObjectOfType<FirstPersonController>();
         _animator = GetComponent<Animator>();
+        _soundManager = GetComponent<EnnemySoundManager>();
         characterController = GetComponent<CharacterController>();
         initialGo = true;
+        randomDirectionTimer = Time.time;
         yield return null;
     }
 
@@ -135,7 +140,6 @@ public class EnnemyBehavior : MonoBehaviour
                 monitorRunTo = true; //make sure that when we have made it to our buffer distance (close to user) we stop the charge until far enough away.
                 executeBufferState = false; //go back to normal activity
             }
-
             //start attacking if close enough
             if (distance < attackRange) {
                 Attack();
@@ -151,7 +155,9 @@ public class EnnemyBehavior : MonoBehaviour
         {
             //the idea here is that the enemy has not yet seen the player, but the player is fairly close while still not visible by the enemy
             //it will move in a random direction continuously altering its direction every 2 seconds until it does see the player.
-            WalkNewPath();
+
+            // WalkNewPath();
+            TeleportAroundPlayer(moveToward);
         }
     }
 
@@ -162,6 +168,7 @@ public class EnnemyBehavior : MonoBehaviour
     private void Attack()
     {
         _animator.SetTrigger(_hashAttack);
+        _soundManager.Attack();
         enabled = false;
         player.Death(transform);
     }
@@ -221,6 +228,30 @@ public class EnnemyBehavior : MonoBehaviour
             }
             yield return null;
         }
+    }
+
+    void TeleportAroundPlayer (Vector3 direction) {
+      // Rotate monster to look to player
+      direction.y = 0;
+      transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), rotationSpeed * Time.deltaTime);
+      transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
+
+      // change position of monster in a random position in a certain radius around player.
+      float randAngle = Random.Range(0.0f, 360.0f);
+      Vector2 newPosition = new Vector2(Mathf.Cos(randAngle) * teleportDistance, Mathf.Sin(randAngle) * teleportDistance);
+      newPosition.x += player.transform.position.x;
+      newPosition.y += player.transform.position.z;
+      transform.position = new Vector3(newPosition.x, 0, newPosition.y);
+
+
+      // decrease radius when passsed a certain amount of time;
+      if ((Time.time - randomDirectionTimer) > reduceRangeTime) {
+        teleportDistance -= 1.0f;
+        if (teleportDistance < attackRange)
+          teleportDistance = attackRange - 1;
+        randomDirectionTimer = Time.time;
+      }
+      _soundManager.Teleport();
     }
 
     //random movement behaviour
@@ -302,6 +333,7 @@ public class EnnemyBehavior : MonoBehaviour
         characterController.Move(direction * Time.deltaTime);
 
         _animator.SetFloat(_hashSpeed, direction.magnitude);
+        _soundManager.Walk();
     }
 
 

@@ -207,7 +207,9 @@ GameObject:
   - component: {fileID: 4846736819855508}
   - component: {fileID: 95053064929079256}
   - component: {fileID: 143843547603509094}
-  - component: {fileID: 114761344802233878}
+  - component: {fileID: 114755935234568632}
+  - component: {fileID: 114864484945104852}
+  - component: {fileID: 82904066279811844}
   m_Layer: 0
   m_Name: Zombie
   m_TagString: Untagged
@@ -1220,6 +1222,137 @@ Transform:
   m_Father: {fileID: 4578689533793888}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &82904066279811844
+AudioSource:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1300611964618398}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 160
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 25
+  Pan2D: 0
+  rolloffMode: 2
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.04
+      value: 1
+      inSlope: -25.00996
+      outSlope: -25.00996
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.08
+      value: 0.5
+      inSlope: -6.25249
+      outSlope: -6.25249
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.16
+      value: 0.25
+      inSlope: -1.5631225
+      outSlope: -1.5631225
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.32
+      value: 0.125
+      inSlope: -0.39078063
+      outSlope: -0.39078063
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.64
+      value: 0.0625
+      inSlope: -0.09769516
+      outSlope: -0.09769516
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -0.04001595
+      outSlope: -0.04001595
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!95 &95053064929079256
 Animator:
   serializedVersion: 3
@@ -1238,7 +1371,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &114761344802233878
+--- !u!114 &114755935234568632
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1254,17 +1387,37 @@ MonoBehaviour:
   floatHeight: 0
   runAway: 0
   runTo: 0
-  runDistance: 25
-  runBufferDistance: 50
-  walkSpeed: 1
-  runSpeed: 2
+  runDistance: 10
+  runBufferDistance: 15
+  walkSpeed: 3
+  runSpeed: 8
   rotationSpeed: 20
-  visualRadius: 150
-  attackRange: 1
+  visualRadius: 40
+  attackRange: 3
   huntingTimer: 5
   estimateElevation: 0
   estRayTimer: 1
-  target: {fileID: 0}
+  teleportDistance: 30
+  reduceRangeTime: 2
+--- !u!114 &114864484945104852
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1300611964618398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6beb7b9e3750ffb4c8c568bce519f2c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  walkSound1: {fileID: 8300000, guid: 384640307e276cf48811d4dc7570da7a, type: 3}
+  walkSound2: {fileID: 8300000, guid: 2ae78d21b6eec354dbf9cd169778905b, type: 3}
+  attackSound: {fileID: 8300000, guid: 2575823aad975fb48af6e385a594a38a, type: 3}
+  tpSound: {fileID: 0}
+  idleSound1: {fileID: 8300000, guid: aeb78b864abbe034fa082626f63d9c8b, type: 3}
+  idleSound2: {fileID: 8300000, guid: 110db19f0df79b149a9dc987d7fbadb0, type: 3}
+  idleTimer: 3
+  _pauseMenu: {fileID: 0}
 --- !u!137 &137039581699937316
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
