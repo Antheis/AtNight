@@ -340,7 +340,7 @@ GameObject:
   - component: {fileID: 114587816203696900}
   m_Layer: 5
   m_Name: Cinematic
-  m_TagString: EditorOnly
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1786,7 +1786,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1466732097590240}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 478e3c1bfa0831a47856121eb8a5073a, type: 3}
   m_Name: 
