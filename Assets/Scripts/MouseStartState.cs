@@ -7,6 +7,7 @@ public class MouseStartState : MonoBehaviour
     private void Awake()
     {
         Cursor.visible = CursorIsVisible;
+        Cursor.lockState = CursorLockMode.None;
         Destroy(this);
     }
 }

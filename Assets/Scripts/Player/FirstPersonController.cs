@@ -94,7 +94,17 @@ namespace Player
             _jumping = false;
             _cinematicHandling = FindObjectOfType<CinematicHandling>();
         }
-        
+
+        private void OnEnable()
+        {
+            _mouseLook.SetCursorLock(true);
+        }
+
+        private void OnDisable()
+        {
+            _mouseLook.SetCursorLock(false);
+        }
+
         private void Update()
         {
             if (_dead)
@@ -158,8 +168,6 @@ namespace Player
 
             _collisionFlags = _characterController.Move(_moveDir*Time.fixedDeltaTime);
 
-            _mouseLook.UpdateCursorLock();
-            
             _animator.SetFloat(_hashSpeed, desiredMove.magnitude);
             _animator.SetBool(_hashAirbone, !_previouslyGrounded);
             _animator.SetFloat(_hashStress, _playerInfo.stressBar);
