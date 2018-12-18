@@ -31,11 +31,11 @@ public class PlayerControls : MonoBehaviour {
 					Destroy(hit.transform.gameObject);
 				}
 				else if (hit.transform.CompareTag("Battery")) {
-					info.addBattery();
+					info.AddBattery();
 					Destroy(hit.transform.gameObject);
 				}
 				else if (hit.transform.CompareTag("Pill")) {
-					info.addPill();
+					info.AddPill();
 					Destroy(hit.transform.gameObject);
 				}
 			}

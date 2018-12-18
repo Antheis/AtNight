@@ -20,7 +20,7 @@ namespace Sound
         private void Start()
         {
             if (IsEnabled)
-                Enable(2.5f);
+                ForceEnable(2.5f);
         }
 
         private void OnDestroy()
@@ -34,10 +34,15 @@ namespace Sound
             _direction = (0 - _audioSource.volume) / length;
             IsEnabled = false;
         }
-        
+
         public void Enable(float length)
         {
             if (IsEnabled) return;
+            ForceEnable(length);
+        }
+
+        private void ForceEnable(float length)
+        {
             _direction = (_activatedVolume - _audioSource.volume) / length;
             IsEnabled = true;
         }

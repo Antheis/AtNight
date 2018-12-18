@@ -6,7 +6,7 @@
 
         public override void Interact()
         {
-            _info.addBattery();
+            _info.AddBattery();
             Destroy(gameObject);
         }
     }

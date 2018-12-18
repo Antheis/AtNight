@@ -1,15 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Player;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerInfo : MonoBehaviour {
 	[HideInInspector]
 	public int batteries = 0;
-	public int batteryLife = 100;
+	public float batteryLife = 100;
 	[HideInInspector]
 	public int pills = 0;
 	public float stressBar = 100.0f;
+
+	public float StressLoss = 1.5f;
+	public float BatterieLoss = 1.5f;
 
     [Space(5)]
     [Header("Display")]
@@ -24,8 +28,6 @@ public class PlayerInfo : MonoBehaviour {
 		get { return (_flashlight.enabled); }
 	}
 
-    private float _timeElapsed = 0;
-
 	private void Awake()
 	{
 		_flashlight = GetComponentInChildren<Light>();
@@ -36,12 +38,15 @@ public class PlayerInfo : MonoBehaviour {
 
     private void Update()
     {
-        _timeElapsed += Time.deltaTime;
-        if (_timeElapsed >= 5f)
-        {
-            HandleFlashlightBattery();
-            _timeElapsed = 0;
-        }
+	    if (FlashLightIsOn) {
+		    batteryLife = Mathf.Clamp(batteryLife - (BatterieLoss*Time.deltaTime), 0f, 100f);
+		    if (batteryLife <= 0f)
+			    HandleFlashlight(false);
+		    UpdateFlashlight();
+	    } else {
+		    stressBar = Mathf.Clamp(stressBar - (StressLoss*Time.deltaTime), 0f, 100f);
+		    UpdateStress();
+	    }
     }
 
     private void UpdateFlashlight()
@@ -62,12 +67,14 @@ public class PlayerInfo : MonoBehaviour {
 		stressDisplay.fillRect.GetComponent<Image>().color = col;
 	}
 
-	public void addBattery() {
+	public void AddBattery()
+	{
 		++batteries;
 		batteryDisplay.text = "x " + batteries;
 	}
 
-	public void useBattery() {
+	public void UseBattery()
+	{
 		if (batteries == 0)
 			return ;
 		--batteries;
@@ -78,12 +85,13 @@ public class PlayerInfo : MonoBehaviour {
 		UpdateFlashlight();
 	}
 
-	public void addPill() {
+	public void AddPill() {
 		++pills;
 		pillDisplay.text = "x " + pills;
 	}
 
-	public void usePill() {
+	public void UsePill()
+	{
 		if (pills == 0)
 			return ;
 		--pills;
@@ -94,24 +102,16 @@ public class PlayerInfo : MonoBehaviour {
 		UpdateStress();
 	}
 
+	public AudioSource FlashLightClick;
+	
 	public void StopFlashLight()
 	{
 		HandleFlashlight(false);
 	}
 	public void HandleFlashlight(bool on)
 	{
-		if (!FlashLightIsOn && on)
-			--batteryLife;
-		_flashlight.enabled = on;
-	}
-
-	void HandleFlashlightBattery() {
-		if (FlashLightIsOn) {
-			--batteryLife;
-			UpdateFlashlight();
-		} else {
-			stressBar -= 1.5f;
-			UpdateStress();
-		}
+		if (FlashLightClick != null)
+			FlashLightClick.Play();
+		_flashlight.enabled = on && (batteryLife > 0f);
 	}
 }

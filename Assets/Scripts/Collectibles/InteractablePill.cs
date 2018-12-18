@@ -6,7 +6,7 @@
 
         public override void Interact()
         {
-            _info.addPill();
+            _info.AddPill();
             Destroy(gameObject);
         }
     }
