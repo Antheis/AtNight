@@ -2,11 +2,11 @@
 
 public class MouseStartState : MonoBehaviour
 {
-    public bool CursorIsVisible;
+    //public bool CursorIsVisible;
     
     private void Awake()
     {
-        Cursor.visible = CursorIsVisible;
+        Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
         Destroy(this);
     }

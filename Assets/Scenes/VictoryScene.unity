@@ -565,7 +565,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1374a66bd2689c0419fe2b76f9d6da0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CursorIsVisible: 0
+  CursorIsVisible: 1
 --- !u!1 &1569861779
 GameObject:
   m_ObjectHideFlags: 0
